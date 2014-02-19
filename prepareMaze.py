@@ -6,11 +6,14 @@ from scipy import ndimage
 
 def plot_image(image, suffix, dpi = 200):
     image = utils.scaleToMax(255, image)
-    plt.imshow(image, cmap=matplotlib.cm.get_cmap("Greys"))
-    plt.axis('off') # clear x- and y-axes
-    figure = plt.gcf() # get current figure
     shape = np.array(image.shape) / dpi 
-    figure.set_size_inches(shape[0], shape[1])
+    fig = plt.figure(frameon=False)
+    fig.set_size_inches(shape[0], shape[1])
+    ax = plt.Axes(fig, [0., 0., 1., 1.])
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    ax.imshow(image, cmap=matplotlib.cm.get_cmap("Greys"), aspect='normal')
+
     plt.savefig("temp/image_%s.png" % suffix, dpi = dpi)
     plt.close()
 

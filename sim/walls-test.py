@@ -77,7 +77,7 @@ const = {
 "nodegradationlimit" : 13,
 "gradientcenter" : [800.0, 800.0],
 #"gradientcenter" : [400.0, 650.0],
-"maze" : "resources/medium_6400.png",
+"maze" : "resources/medium_1600.new.png",
 "wall" : 1.0,
 "wall_limit" : 0.3,
 
