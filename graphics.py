@@ -38,7 +38,7 @@ def main(name):
     
     funcs = [
              create_path_plot,
-#             create_video
+             create_video
              ]
     if len(constlist)==0:
         utils.info("No simulations fit the filter criteria given.")

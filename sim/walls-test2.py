@@ -32,7 +32,7 @@ def getConst(vartuple, exclude=None):
 const = {
 #parameters that control the simulation in general
 "get" : getConst,
-"name" : "walls-test_pM%s_r%s", #name of folder including %s for variables to be replaced according to "factors"
+"name" : "walls-test2_pM%s_r%s", #name of folder including %s for variables to be replaced according to "factors"
 "factors" : ["percentage", "repetitions"],
 "handle_repetitions_with" : "mean",
 "repetitions" : range(1),
@@ -77,7 +77,7 @@ const = {
 "nodegradationlimit" : 13,
 "gradientcenter" : [800.0, 800.0],
 #"gradientcenter" : [400.0, 650.0],
-"maze" : "resources/medium_1600.png",
+"maze" : "resources/medium_1600.new.png",
 "wall" : 1.0,
 "wall_limit" : 0.3,
 

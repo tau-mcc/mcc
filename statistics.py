@@ -92,23 +92,23 @@ def singleStats(filename, doFinalStats=False):
 
 #        #get average energy
         consider = sp.logical_or(ds.states==sim.States.MOVING, ds.states==sim.States.ORIENTING)
-#        energies = sp.ma.array(ds.energies, mask=~consider)
-#        avg_energy_m = sp.mean(energies[:,mesenchymals], axis=1) if mesenchymals.any() else None
-#        avg_energy_a = sp.mean(energies[:,amoeboids], axis=1) if amoeboids.any() else None
+        energies = sp.ma.array(ds.energies, mask=~consider)
+        avg_energy_m = sp.mean(energies[:,mesenchymals], axis=1) if mesenchymals.any() else None
+        avg_energy_a = sp.mean(energies[:,amoeboids], axis=1) if amoeboids.any() else None
         #get avg velocities
         vel = ds.velocities
         v = sp.sqrt(sp.sum(vel*vel, axis=2))
         v_masked = sp.ma.array(v, mask=~consider)
-#        avg_vel_m = sp.mean(v_masked[:,mesenchymals], axis=1) if mesenchymals.any else None
-#        avg_vel_a = sp.mean(v_masked[:,amoeboids], axis=1) if amoeboids.any() else None
-#        #plot the stuff on two separate axes
-#        y_axes = [avg_energy_a, avg_energy_m]
-#        y_axes2 = [avg_vel_a, avg_vel_m]
-#        mylegend = ["amoeboid", "mesenchymal"]
-#        mylegend2 = mylegend
-#        y_axes, mylegend = remove_None(y_axes, mylegend)
-#        y_axes2, mylegend2 = remove_None(y_axes2, mylegend2)
-#        plotting.plotlines_vert_subplot(len(y_axes)*[ds.times], y_axes, len(y_axes2)*[ds.times], y_axes2, xlabel="Time", ylabel="Average energy", xlabel2="Time", ylabel2="Average velocity", legend=mylegend,legend2=mylegend2, folder=resultsfolder, savefile=constants.avg_en_vel_filename)
+        avg_vel_m = sp.mean(v_masked[:,mesenchymals], axis=1) if mesenchymals.any else None
+        avg_vel_a = sp.mean(v_masked[:,amoeboids], axis=1) if amoeboids.any() else None
+        #plot the stuff on two separate axes
+        y_axes = [avg_energy_a, avg_energy_m]
+        y_axes2 = [avg_vel_a, avg_vel_m]
+        mylegend = ["amoeboid", "mesenchymal"]
+        mylegend2 = mylegend
+        y_axes, mylegend = remove_None(y_axes, mylegend)
+        y_axes2, mylegend2 = remove_None(y_axes2, mylegend2)
+        plotting.plotlines_vert_subplot(len(y_axes)*[ds.times], y_axes, len(y_axes2)*[ds.times], y_axes2, xlabel="Time", ylabel="Average energy", xlabel2="Time", ylabel2="Average velocity", legend=mylegend,legend2=mylegend2, folder=resultsfolder, savefile=constants.avg_en_vel_filename)
         
         goal = sp.array(results["gradientcenter"])
         dist = statutils.getDistances(ds.positions, goal)
