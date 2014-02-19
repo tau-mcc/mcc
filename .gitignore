@@ -5,6 +5,7 @@ results/*
 **/*.pyc
 *.lprof
 .settings/
+temp/
 *#
 *~
 
