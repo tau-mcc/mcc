@@ -12,7 +12,7 @@ def plot_image(image, suffix, dpi = 200):
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_axis_off()
     fig.add_axes(ax)
-    ax.imshow(image, cmap=matplotlib.cm.get_cmap("Greys"), aspect='normal')
+    ax.imshow(image.T, cmap=matplotlib.cm.get_cmap("Greys"), aspect='normal', origin='lower')
 
     plt.savefig("temp/image_%s.png" % suffix, dpi = dpi)
     plt.close()
