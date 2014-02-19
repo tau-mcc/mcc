@@ -35,8 +35,10 @@ filename = "resources/medium_1600.png"
 
 original_maze = utils.loadImage(filename)
 original_maze = utils.scaleToMax(black_value, original_maze)
+#remember which pixels were white in the beginning
 white_pixels = (original_maze == 0.0)
 
+#calculate the average grey value of the pixels
 average_grey = np.mean(original_maze)
 
 current_image = original_maze
@@ -62,23 +64,27 @@ while average_grey > stop_blurring_at and n < 10:
     average_grey = np.mean(current_image)
     n += 1
 
+#plot all images from the intermediate steps
 for i, image in enumerate(list_of_images):
     plot_image(image, str(i))
     plot_slice(image, str(i))
 
-#sum up
+#sum up all the intermediate images to get "pyramid-like" walls
+#the plot_* functions used later will take care of adjusting the maximum pixel value 
 summed_image = np.zeros_like(original_maze, dtype=np.float)
 for i, image in enumerate(list_of_images):
     summed_image += image
 
-
+#apply some gaussian blur to the sum
 summed_image = ndimage.gaussian_filter(summed_image, sigma_final)
+#now set every pixel that was originally white to white again
+#so we don't modify the initial topography of the maze
 summed_image[white_pixels] = 0
 
 plot_image(summed_image, "sum")
 plot_slice(summed_image, "sum")
 
-#try to recreate original
+#try to recreate original maze, to see if we didn't change it
 recreation_of_original = np.zeros_like(original_maze)
 recreation_of_original[summed_image > 0.1] = 1.0
 plot_image(recreation_of_original, "orig")
