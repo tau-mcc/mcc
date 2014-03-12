@@ -343,13 +343,30 @@ class Simulation:
             # v(t+dt) = v(t) + dt/m * F(t)
             currentVelocities = lastVelocities + one_over_m * dt * F_total
             
+            #If agents are moving into a all, their velocity vector will be pointing against the gradient describing the wall
+            #meaning that the scalar product between the two will be negative.
+            #In this and only this case, we have to make adjustments to the velocity vector of the agent:
+            #we project its velocity vector on the gradient vector and remove the projection from the velocity vector
+            #That means that if it was moving "into" the wall, it will now be moving along the wall
+            #If the scalar product was positive, the agent wasn't moving into the wall, so we don't need to do anything.
             if collidingWithWall.any():
                 dotv = np.zeros((self.N))
+                #Calculate the scalar product between the velocity vector and the vector describing the gradient of the wall
                 dotv[collidingWithWall] = np.sum(currentVelocities[collidingWithWall] * wgrad[collidingWithWall], axis=1)
+                #We only need to act if the agents are moving "into" the wall, i.e., the scalar product is negative
                 doAdjust = dotv<0
                 if doAdjust.any():
+                    #Normalize the scalar product because we'll use it for a projection.
                     dotv[doAdjust] /= wallnorm[doAdjust]
-                    currentVelocities[doAdjust] -= dotv[doAdjust][:,np.newaxis] * wgrad[doAdjust]
+                    #forbiddenComponent contains the part of the velocity vector which is normal to the wall
+                    #dotv has shape (N, 1), while wgrad has shape (N, 2)
+                    #normally NumPy doesn't know how to multiply arrays of those two shapes
+                    #by using the notation arr[:,np.newaxis] we tell it to enlarge the (N, 1) array into a (N, 2) array
+                    #by simply copying the values into the new dimensions.
+                    #The multiplication is now (N,2) * (N,2) and therefore hapens component by component.
+                    forbiddenComponent = dotv[doAdjust][:,np.newaxis] * wgrad[doAdjust]
+                    #Remove forbiddenComponent from the velocity vector
+                    currentVelocities[doAdjust] -= forbiddenComponent
 
             #x(t+dt) = x(t) + dt * v(t)
             currentPositions = lastPositions + currentVelocities * dt
